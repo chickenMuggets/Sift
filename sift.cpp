@@ -3,20 +3,28 @@
 #include <vector>
 #include "includes/getterminalsize.h"
 #include "includes/getcontentsofdir.h"
+#include "includes/getselectedcharacter.h"
 
-int main() {
-    std::vector<std::string> dir = getContentsInDir();  // Get the list of directories/files
-    double filenum = 0;
-
-    // Print each directory/file with its index
-    for (const auto& entry : dir) {
-        filenum += 1;
-        std::cout << filenum << ": " << entry << std::endl;
+int main(int argc, char** argv) {
+    std::string filedirectory;
+    if (argc > 1) {
+        filedirectory = argv[1];
     }
-
-    // Assuming getTerminalSize() returns a string or a number representing terminal width/height
-    std::cout << "terminal size: " << getTerminalSize(0) << std::endl;
-
+    else {
+        #ifdef _WIN32
+        filedirectory = "C:/";
+        #else
+        filedirectory = "/usr/"
+        #endif
+        
+    }
+    std::vector<std::string> dirContents = getContentsInDir(filedirectory);
+    double originalLoopAmount = dirContents.size();
+    double loopNumber = 0;
+    for(int loopAmount = originalLoopAmount; loopAmount > 0; loopAmount--) {
+        loopNumber++;
+        std::cout << dirContents[loopNumber] << "\n";
+    }
     std::cin.get();  // Wait for user input before exiting
     return 0;
 }
