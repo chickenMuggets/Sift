@@ -25,6 +25,6 @@ int main(int argc, char** argv) {
         loopNumber++;
         std::cout << dirContents[loopNumber] << "\n";
     }
-    std::cin.get();  // Wait for user input before exiting
+    std::cin.get();
     return 0;
 }
