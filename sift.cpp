@@ -19,12 +19,11 @@ int main(int argc, char** argv) {
         
     }
     std::vector<std::string> dirContents = getContentsInDir(filedirectory);
-    double originalLoopAmount = dirContents.size();
-    double loopNumber = 0;
-    for(int loopAmount = originalLoopAmount; loopAmount > 0; loopAmount--) {
-        loopNumber++;
-        std::cout << dirContents[loopNumber] << "\n";
+    for(int i = 0; i < dirContents.size(); i++) {
+        std::cout << dirContents[i] << "\n";
     }
+
+    std::cout << "Press any key to continue...";
     std::cin.get();
     return 0;
 }
