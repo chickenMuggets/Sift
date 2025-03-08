@@ -4,6 +4,7 @@
 #include "includes/getterminalsize.h"
 #include "includes/getcontentsofdir.h"
 #include "includes/getselectedcharacter.h"
+#include "includes/consVectorHandler.h"
 
 int main(int argc, char** argv) {
     std::string filedirectory;
@@ -15,14 +16,10 @@ int main(int argc, char** argv) {
         filedirectory = "C:/";
         #else
         filedirectory = "/usr/"
-        #endif
-        
-    }
-    std::vector<std::string> dirContents = getContentsInDir(filedirectory);
-    for(int i = 0; i < dirContents.size(); i++) {
-        std::cout << dirContents[i] << "\n";
+        #endif   
     }
 
+    
     std::cout << "Press any key to continue...";
     std::cin.get();
     return 0;

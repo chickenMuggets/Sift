@@ -2,20 +2,22 @@
 #include <iostream>
 
 namespace consolevectorhandler {
-    std::vector<std::string> addToVector(std::vector<std::string> vec, std::string str) {
-        vec.push_back(str);
-        return vec;
+    std::vector<std::string> consoleVector;
+    void updateVector(std::string newString, double updateNum) {
+        consoleVector.at(updateNum) = newString;
     }
-    std::vector<std::string> updateVector(std::vector<std::string> vec, std::string str, int index) {
-        vec[index] = str;
-        return vec;
+    void addToVector(std::string newString) {
+        consoleVector.push_back(newString);
     }
-    std::vector<std::string> removeFromVector(std::vector<std::string> vec, int index) {
-        vec.erase(vec.begin() + index);
-        return vec;
-    }
-    std::vector<std::string> clearVector(std::vector<std::string> vec) {
-        vec.clear();
-        return vec;
+    void updateScreen() {
+        std::cout << "\033[H";
+        #ifdef _WIN32
+        system("cls");
+        #else
+        system("clear");
+        #endif
+        for(int i = consoleVector.size(); i > 0; i--) {
+            std::cout << consoleVector[consoleVector.size() - i];
+        }
     }
 }
