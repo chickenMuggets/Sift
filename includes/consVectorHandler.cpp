@@ -3,11 +3,11 @@
 
 namespace consolevectorhandler {
     std::vector<std::string> consoleVector;
-    void updateVector(std::string newString, double updateNum) {
-        consoleVector.at(updateNum) = newString;
-    }
     void addToVector(std::string newString) {
         consoleVector.push_back(newString);
+    }
+    void updateVector(std::string newString, double updateNum) {
+        consoleVector.at(updateNum) = newString;
     }
     void updateScreen() {
         std::cout << "\033[H";
@@ -17,7 +17,8 @@ namespace consolevectorhandler {
         system("clear");
         #endif
         for(int i = consoleVector.size(); i > 0; i--) {
-            std::cout << consoleVector[consoleVector.size() - i];
+            std::cout << consoleVector[consoleVector.size() - i] << "\n";
         }
     }
+    
 }

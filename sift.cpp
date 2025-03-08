@@ -18,8 +18,13 @@ int main(int argc, char** argv) {
         filedirectory = "/usr/"
         #endif   
     }
+    std::vector<std::string> filesindir = getContentsInDir(filedirectory);
 
-    
+    for (int i = filesindir.size(); i > 0; i--) {
+        consolevectorhandler::addToVector(filesindir[filesindir.size() - i]);
+    }
+    consolevectorhandler::updateScreen();
+
     std::cout << "Press any key to continue...";
     std::cin.get();
     return 0;
