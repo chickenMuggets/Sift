@@ -26,5 +26,7 @@ namespace consolevectorhandler {
             }
         }
     }
-    
+    void changeSelection(int newSelectionItem) {
+        selectedFile = newSelectionItem;
+    }
 }

@@ -6,6 +6,7 @@
 #include <unistd.h>
 #endif
 
+
 #ifdef _WIN32
 char getchrim() {
     return _getch();
