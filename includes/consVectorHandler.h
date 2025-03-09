@@ -9,7 +9,8 @@ namespace consolevectorhandler {
     void addToVector(std::string newString);
     void updateScreen();
     int getCurrentSelected();
-    void changeSelection(int newSelectionItem);
+    void changeSelection(int newSelectionItem, int maxSelection);
     void clearConsoleVector();
+    int getVectorLength();
 }
 #endif // __CONSVECTORHANDLER_H__

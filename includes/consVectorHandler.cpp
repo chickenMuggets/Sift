@@ -24,10 +24,19 @@ namespace consolevectorhandler {
     int getCurrentSelected() {
         return selectedFile;
     }
-    void changeSelection(int newSelectionItem) {
-        selectedFile = newSelectionItem;
+    void changeSelection(int newSelectionItem, int maxSelection) {
+        if (newSelectionItem < 0) {
+            selectedFile = 0;
+        } else if (newSelectionItem >= maxSelection) {
+            selectedFile = maxSelection - 1;
+        } else {
+            selectedFile = newSelectionItem;
+        }
     }
     void clearConsoleVector() {
         consoleVector.clear();
+    }
+    int getVectorLength() {
+        return consoleVector.size();
     }
 }

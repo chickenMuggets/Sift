@@ -42,9 +42,9 @@ int main(int argc, char** argv) {
             case -32:  // Arrow keys detection (ANSI escape code)
                 ch = getchrim();
                 if (ch == 72) {  // Up arrow key
-                    consolevectorhandler::changeSelection(consolevectorhandler::getCurrentSelected() - 1);
+                    consolevectorhandler::changeSelection(consolevectorhandler::getCurrentSelected() - 1, consolevectorhandler::getVectorLength());
                 } else if (ch == 80) {  // Down arrow key
-                    consolevectorhandler::changeSelection(consolevectorhandler::getCurrentSelected() + 1);
+                    consolevectorhandler::changeSelection(consolevectorhandler::getCurrentSelected() + 1, consolevectorhandler::getVectorLength());
                 }
                 break;
             case 58:
