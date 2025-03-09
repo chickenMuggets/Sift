@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
     consolevectorhandler::updateScreen();
 
     while (running) {
-        if (_kbhit()) {
+        if (kbhit()) {
             int ch = getchrim();
             std::string interpreted = interpretKeys(ch);
             std::string userCommand;
@@ -65,9 +65,9 @@ int main(int argc, char** argv) {
                     consolevectorhandler::updateScreen();
                 }
             }
+            consolevectorhandler::updateScreen();
         }
 
-        consolevectorhandler::updateScreen();
         std::this_thread::sleep_for(std::chrono::milliseconds(16));  // Frame delay
     }
 
