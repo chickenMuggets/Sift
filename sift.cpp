@@ -10,7 +10,37 @@
 #include "includes/keypresshandler.h"
 #ifdef _WIN32
 #include <conio.h>
+#else
+#include <stdio.h>
+#include <sys/select.h>
+#include <sys/ioctl.h>   // Include for ioctl and FIONREAD
+#include <unistd.h>      // Include for STDIN
+#include <termios.h>
 #endif
+
+// Define _kbhit() outside the main function to avoid the function-definition error.
+#ifdef _WIN32
+// Windows-specific _kbhit() implementation can go here if needed.
+#else
+int _kbhit() {
+    static const int STDIN = 0;
+    static bool initialized = false;
+
+    if (!initialized) {
+        // Use termios to turn off line buffering
+        termios term;
+        tcgetattr(STDIN, &term);
+        term.c_lflag &= ~ICANON;
+        tcsetattr(STDIN, TCSANOW, &term);
+        setbuf(stdin, NULL);
+        initialized = true;
+    }
+
+    int bytesWaiting;
+    ioctl(STDIN, FIONREAD, &bytesWaiting);  // Check if data is available on stdin
+    return bytesWaiting;
+}
+#endif    
 
 int main(int argc, char** argv) {
     std::string filedirectory;
@@ -24,18 +54,22 @@ int main(int argc, char** argv) {
         filedirectory = "/usr/";
         #endif
     }
+
     std::vector<std::string> filesindir = getContentsInDir(filedirectory);
     for (int i = filesindir.size(); i > 0; i--) {
         consolevectorhandler::addToVector(filesindir[filesindir.size() - i]);
     }
+
     bool running = true;
-    std::cout << "\033[?25l";
+    std::cout << "\033[?25l";  // Hide cursor
     consolevectorhandler::updateScreen();
+
     while (running) {
-        if (_kbhit) {
+        if (_kbhit()) {
             int ch = getchrim();
             std::string interpreted = interpretKeys(ch);
             std::string userCommand;
+
             if (interpreted == "none") {
                 std::cout << "Pressed key: " << ch << std::endl;
             } else if (interpreted == "q") {
@@ -48,6 +82,7 @@ int main(int argc, char** argv) {
                 consolevectorhandler::updateScreen();
                 std::cout << ":";
                 std::getline(std::cin, userCommand);
+
                 if (userCommand == "exit") {
                     running = false;
                 } else if (userCommand == "Ex") {
@@ -55,6 +90,7 @@ int main(int argc, char** argv) {
                     std::getline(std::cin, filedirectory);
                     std::vector<std::string> filesindir = getContentsInDir(filedirectory);
                     consolevectorhandler::clearConsoleVector();
+
                     for (int i = filesindir.size(); i > 0; i--) {
                         consolevectorhandler::addToVector(filesindir[filesindir.size() - i]);
                     }
@@ -62,8 +98,10 @@ int main(int argc, char** argv) {
                 }
             }
         }
+
         consolevectorhandler::updateScreen();
         std::this_thread::sleep_for(std::chrono::milliseconds(16));  // Frame delay
     }
+
     return 0;
 }
