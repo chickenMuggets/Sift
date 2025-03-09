@@ -51,17 +51,25 @@ int main(int argc, char** argv) {
                 consolevectorhandler::changeSelection(consolevectorhandler::getCurrentSelected() + 1, consolevectorhandler::getVectorLength());
             } else if (interpreted == "enter") {
                 std::string previousFileDirectory = filedirectory;
+                log("the previous file directory is: " + previousFileDirectory);
                 try {
                     filedirectory = filedirectory + "/"+ consolevectorhandler::getSelectedFile();
-                    std::vector<std::string> filesindir = getContentsInDir(filedirectory);
-                    consolevectorhandler::clearConsoleVector();
-                    int terminalSize = getTerminalSize(0);
-                    for (int i = 0; i < terminalSize && i < filesindir.size(); i++) {
-                        consolevectorhandler::addToVector(filesindir[i]);
+                    
+                    if (std::filesystem::is_directory(filedirectory)) {
+                        consolevectorhandler::changeSelection(0, consolevectorhandler::getVectorLength());
+                        consolevectorhandler::updateScreen();
+                        log("Changed directory to: " + filedirectory);
+                        std::vector<std::string> filesindir = getContentsInDir(filedirectory);
+                        consolevectorhandler::clearConsoleVector();
+                        int terminalSize = getTerminalSize(0);
+                        for (int i = 0; i < terminalSize && i < filesindir.size(); i++) {
+                            consolevectorhandler::addToVector(filesindir[i]);
+                        }
+                    } else {
+                        filedirectory = previousFileDirectory;
+                        consolevectorhandler::updateScreen();
+                        throw std::runtime_error("Not a directory");
                     }
-                    consolevectorhandler::changeSelection(0, consolevectorhandler::getVectorLength());
-                    consolevectorhandler::updateScreen();
-                    log("Changed directory to: " + filedirectory);
                 }
                 catch (const std::exception& e) {
                     std::cout << "Error: " << filedirectory + "/" + consolevectorhandler::getSelectedFile() << " is not a directory" << std::endl;
