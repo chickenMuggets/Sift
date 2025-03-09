@@ -33,7 +33,7 @@ int getchrim() {
     
     return ch;
 }
-int _kbhit() {
+int kbhit() {
     static const int STDIN = 0;
     static bool initialized = false;
 
