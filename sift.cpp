@@ -24,25 +24,35 @@ int main(int argc, char** argv) {
         #endif   
     }
     std::vector<std::string> filesindir = getContentsInDir(filedirectory);
+    for (int i = filesindir.size(); i > 0; i--) {
+        consolevectorhandler::addToVector(filesindir[filesindir.size() - i]);
+    }
     bool running = true;
+    std::cout << "\033[?25l";
+    consolevectorhandler::updateScreen();
     while (running) {
-        for (int i = filesindir.size(); i > 0; i--) {
-            consolevectorhandler::addToVector(filesindir[filesindir.size() - i]);
-        }
-        consolevectorhandler::updateScreen();
-        
         if (_kbhit) {
-            char ch = getchrim();
-            if (ch == 'q') {
+            int ch = getchrim();
+            switch (ch)
+            {
+            case 113:  // 'q' to quit
                 running = false;
+                break;
+            case -32:  // Arrow keys detection (ANSI escape code)
+                ch = getchrim();
+                if (ch == 72) {  // Up arrow key
+                    consolevectorhandler::changeSelection(consolevectorhandler::getCurrentSelected() - 1);
+                } else if (ch == 80) {  // Down arrow key
+                    consolevectorhandler::changeSelection(consolevectorhandler::getCurrentSelected() + 1);
+                }
+                break;
+            default:
+                std::cout << "Pressed key: " << ch << std::endl;
+                break;
             }
         }
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));
+        consolevectorhandler::updateScreen();
+        std::this_thread::sleep_for(std::chrono::milliseconds(16));  // Frame delay
     }
-    std::cout << "Press any key to continue...";
-    std::cin.get();
     return 0;
 }
-
-bool sleep = true;

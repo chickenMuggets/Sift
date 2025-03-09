@@ -8,11 +8,11 @@
 
 
 #ifdef _WIN32
-char getchrim() {
+int getchrim() {
     return _getch();
 }
 #else
-char getchrim() {
+int getchrim() {
     struct termios oldt, newt;
     char ch;
     
