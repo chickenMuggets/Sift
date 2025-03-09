@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
         filedirectory = "C:/";
         #else
         filedirectory = "/usr/";
-        #endif   
+        #endif
     }
     std::vector<std::string> filesindir = getContentsInDir(filedirectory);
     for (int i = filesindir.size(); i > 0; i--) {

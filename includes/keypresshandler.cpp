@@ -22,6 +22,26 @@ std::string interpretKeys(int ch) {
             return "none";
             break;
         #else
+        case 'q':  // 'q' to quit
+            return "q";
+            break;
+        case 27:  // Arrow keys detection (ANSI escape code)
+            ch = getchrim();
+            if (ch == 91) {  // '[' character
+                ch = getchrim();
+                if (ch == 65) {  // Up arrow key
+                    return "up";
+                } else if (ch == 66) {  // Down arrow key
+                    return "down";
+                }
+            }
+            break;
+        case ':': // ':'
+            return ":";
+            break;
+        default:
+            return "none";
+            break;
         #endif
     }
     return "none";
