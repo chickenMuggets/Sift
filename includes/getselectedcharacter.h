@@ -10,4 +10,5 @@
 #endif
 
 char getchrim();
+int kbhit();
 #endif // __GETSELECTEDCHARACTER_H__
