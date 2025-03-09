@@ -7,7 +7,7 @@
 #include <unistd.h>
 #endif
 
-int getTerminalSize(int RC = 1) {
+int getTerminalSize(int RC = 0) {
     #ifdef _WIN32
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);

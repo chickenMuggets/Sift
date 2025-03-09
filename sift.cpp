@@ -8,6 +8,7 @@
 #include "includes/getselectedcharacter.h"
 #include "includes/consVectorHandler.h"
 #include "includes/keypresshandler.h"
+#include "includes/logger.h"
 
 
 int main(int argc, char** argv) {
@@ -17,16 +18,18 @@ int main(int argc, char** argv) {
     }
     else {
         #ifdef _WIN32
-        filedirectory = "C:/";
+        filedirectory = "C:";
         #else
-        filedirectory = "/usr/";
+        filedirectory = "/home/";
         #endif
     }
 
     std::vector<std::string> filesindir = getContentsInDir(filedirectory);
-    for (int i = filesindir.size(); i > 0; i--) {
-        consolevectorhandler::addToVector(filesindir[filesindir.size() - i]);
+    int terminalSize = getTerminalSize(0);
+    for (int i = 0; i < terminalSize && i < filesindir.size(); i++) {
+        consolevectorhandler::addToVector(filesindir[i]);
     }
+    
 
     bool running = true;
     std::cout << "\033[?25l";  // Hide cursor
@@ -47,14 +50,25 @@ int main(int argc, char** argv) {
             } else if (interpreted == "down") {
                 consolevectorhandler::changeSelection(consolevectorhandler::getCurrentSelected() + 1, consolevectorhandler::getVectorLength());
             } else if (interpreted == "enter") {
-                filedirectory = filedirectory + "/"+ consolevectorhandler::getSelectedFile();
-                std::vector<std::string> filesindir = getContentsInDir(filedirectory);
+                std::string previousFileDirectory = filedirectory;
+                try {
+                    filedirectory = filedirectory + "/"+ consolevectorhandler::getSelectedFile();
+                    std::vector<std::string> filesindir = getContentsInDir(filedirectory);
                     consolevectorhandler::clearConsoleVector();
-
-                    for (int i = filesindir.size(); i > 0; i--) {
-                        consolevectorhandler::addToVector(filesindir[filesindir.size() - i]);
+                    int terminalSize = getTerminalSize(0);
+                    for (int i = 0; i < terminalSize && i < filesindir.size(); i++) {
+                        consolevectorhandler::addToVector(filesindir[i]);
                     }
+                    consolevectorhandler::changeSelection(0, consolevectorhandler::getVectorLength());
                     consolevectorhandler::updateScreen();
+                    log("Changed directory to: " + filedirectory);
+                }
+                catch (const std::exception& e) {
+                    std::cout << "Error: " << filedirectory + "/" + consolevectorhandler::getSelectedFile() << " is not a directory" << std::endl;
+                    log("Error: " + filedirectory + "/" + consolevectorhandler::getSelectedFile() + " is not a directory");
+                    filedirectory = previousFileDirectory;
+                    consolevectorhandler::updateScreen();
+                }
             } else if (interpreted == ":") {
                 consolevectorhandler::updateScreen();
                 std::cout << ":";
@@ -67,10 +81,11 @@ int main(int argc, char** argv) {
                     std::getline(std::cin, filedirectory);
                     std::vector<std::string> filesindir = getContentsInDir(filedirectory);
                     consolevectorhandler::clearConsoleVector();
-
-                    for (int i = filesindir.size(); i > 0; i--) {
-                        consolevectorhandler::addToVector(filesindir[filesindir.size() - i]);
+                    int terminalSize = getTerminalSize(0);
+                    for (int i = 0; i < terminalSize && i < filesindir.size(); i++) {
+                        consolevectorhandler::addToVector(filesindir[i]);
                     }
+                    consolevectorhandler::changeSelection(0, consolevectorhandler::getVectorLength());
                     consolevectorhandler::updateScreen();
                 }
             }

@@ -3,5 +3,5 @@
 
 #include <iostream>
 
-int getTerminalSize(int RC = 1);
+int getTerminalSize(int RC = 0);
 #endif // __GETTERMINALSIZE_H__

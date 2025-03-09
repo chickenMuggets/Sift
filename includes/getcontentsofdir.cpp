@@ -6,8 +6,8 @@ std::vector<std::string> getContentsInDir(std::string directory) {
     try {
         std::vector<std::string> contents;
         for (const auto& entry : std::filesystem::directory_iterator(directory)) {
-            // Store just the relative path or filename
-            contents.push_back(entry.path().relative_path().string()); // Use relative_path() to remove the drive prefix
+            // Store just the filename
+            contents.push_back(entry.path().filename().string()); // Use filename() to get just the filename
         }
         return contents;
     }
@@ -16,14 +16,14 @@ std::vector<std::string> getContentsInDir(std::string directory) {
         #ifdef _WIN32
         std::vector<std::string> contents;
         for (const auto& entry : std::filesystem::directory_iterator("C:/")) {
-            // Store just the relative path or filename
-            contents.push_back(entry.path().relative_path().string()); // Use relative_path() to remove the drive prefix
+            // Store just the filename
+            contents.push_back(entry.path().filename().string()); // Use filename() to get just the filename
         }
         #else
         std::vector<std::string> contents;
         for (const auto& entry : std::filesystem::directory_iterator("/home/")) {
-            // Store just the relative path or filename
-            contents.push_back(entry.path().relative_path().string()); // Use relative_path() to remove the drive prefix
+            // Store just the filename
+            contents.push_back(entry.path().filename().string()); // Use filename() to get just the filename
         }
         #endif
         return contents;

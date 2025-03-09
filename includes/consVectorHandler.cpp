@@ -12,7 +12,6 @@ namespace consolevectorhandler {
     }
     void updateScreen() {
         std::cout << "\033[H\033[J";
-
         for (std::size_t i = 0; i < consoleVector.size(); i++) {
             if (i == selectedFile) {
                 std::cout << "\033[30m\033[47m" << consoleVector[i] << "\x1b[0m\n";  // Highlight selection
