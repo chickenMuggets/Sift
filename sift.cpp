@@ -46,6 +46,15 @@ int main(int argc, char** argv) {
                 consolevectorhandler::changeSelection(consolevectorhandler::getCurrentSelected() - 1, consolevectorhandler::getVectorLength());
             } else if (interpreted == "down") {
                 consolevectorhandler::changeSelection(consolevectorhandler::getCurrentSelected() + 1, consolevectorhandler::getVectorLength());
+            } else if (interpreted == "enter") {
+                filedirectory = filedirectory + "/"+ consolevectorhandler::getSelectedFile();
+                std::vector<std::string> filesindir = getContentsInDir(filedirectory);
+                    consolevectorhandler::clearConsoleVector();
+
+                    for (int i = filesindir.size(); i > 0; i--) {
+                        consolevectorhandler::addToVector(filesindir[filesindir.size() - i]);
+                    }
+                    consolevectorhandler::updateScreen();
             } else if (interpreted == ":") {
                 consolevectorhandler::updateScreen();
                 std::cout << ":";

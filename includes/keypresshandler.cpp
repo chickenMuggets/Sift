@@ -18,6 +18,9 @@ std::string interpretKeys(int ch) {
         case 58: // ':'
             return ":";
             break;
+        case 13:
+            return "enter";
+            break;
         default:
             return "none";
             break;

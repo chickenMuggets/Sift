@@ -9,6 +9,7 @@ namespace consolevectorhandler {
     void addToVector(std::string newString);
     void updateScreen();
     int getCurrentSelected();
+    std::string getSelectedFile();
     void changeSelection(int newSelectionItem, int maxSelection);
     void clearConsoleVector();
     int getVectorLength();

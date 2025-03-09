@@ -24,6 +24,9 @@ namespace consolevectorhandler {
     int getCurrentSelected() {
         return selectedFile;
     }
+    std::string getSelectedFile() {
+        return consoleVector[selectedFile];
+    }
     void changeSelection(int newSelectionItem, int maxSelection) {
         if (newSelectionItem < 0) {
             selectedFile = 0;
