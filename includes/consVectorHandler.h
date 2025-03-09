@@ -10,5 +10,6 @@ namespace consolevectorhandler {
     void updateScreen();
     int getCurrentSelected();
     void changeSelection(int newSelectionItem);
+    void clearConsoleVector();
 }
 #endif // __CONSVECTORHANDLER_H__

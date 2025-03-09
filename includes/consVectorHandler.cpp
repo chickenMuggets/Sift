@@ -27,4 +27,7 @@ namespace consolevectorhandler {
     void changeSelection(int newSelectionItem) {
         selectedFile = newSelectionItem;
     }
+    void clearConsoleVector() {
+        consoleVector.clear();
+    }
 }
