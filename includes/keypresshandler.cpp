@@ -15,11 +15,14 @@ std::string interpretKeys(int ch) {
                 return "down";
             }
             break;
-        case 58: // ':'
+        case 58:
             return ":";
             break;
         case 13:
             return "enter";
+            break;
+        case 8:
+            return "backspace";
             break;
         default:
             return "none";
@@ -41,6 +44,12 @@ std::string interpretKeys(int ch) {
             break;
         case ':': // ':'
             return ":";
+            break;
+        case 10:
+            return "enter";
+            break;
+        case 127:
+            return "backspace";
             break;
         default:
             return "none";

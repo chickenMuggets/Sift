@@ -33,7 +33,8 @@ int main(int argc, char** argv) {
 
     bool running = true;
     std::cout << "\033[?25l";  // Hide cursor
-    consolevectorhandler::updateScreen();
+    consolevectorhandler::updateScreen(consolevectorhandler::getCurrentSelected());
+    
 
     while (running) {
         if (kbhit()) {
@@ -46,9 +47,17 @@ int main(int argc, char** argv) {
             } else if (interpreted == "q") {
                 running = false;
             } else if (interpreted == "up") {
-                consolevectorhandler::changeSelection(consolevectorhandler::getCurrentSelected() - 1, consolevectorhandler::getVectorLength());
+                if (consolevectorhandler::getCurrentSelected() < getTerminalSize(0)) {
+                    consolevectorhandler::changeSelection(consolevectorhandler::getCurrentSelected() - 1, consolevectorhandler::getVectorLength());
+                } else {
+                    consolevectorhandler::resetCurentSelected();
+                }
             } else if (interpreted == "down") {
-                consolevectorhandler::changeSelection(consolevectorhandler::getCurrentSelected() + 1, consolevectorhandler::getVectorLength());
+                if (consolevectorhandler::getCurrentSelected() < getTerminalSize(0)) {
+                    consolevectorhandler::changeSelection(consolevectorhandler::getCurrentSelected() + 1, consolevectorhandler::getVectorLength());
+                } else {
+                    consolevectorhandler::resetCurentSelected();
+                }
             } else if (interpreted == "enter") {
                 std::string previousFileDirectory = filedirectory;
                 log("the previous file directory is: " + previousFileDirectory);
@@ -57,28 +66,48 @@ int main(int argc, char** argv) {
                     
                     if (std::filesystem::is_directory(filedirectory)) {
                         consolevectorhandler::changeSelection(0, consolevectorhandler::getVectorLength());
-                        consolevectorhandler::updateScreen();
+                        consolevectorhandler::updateScreen(consolevectorhandler::getCurrentSelected());
                         log("Changed directory to: " + filedirectory);
                         std::vector<std::string> filesindir = getContentsInDir(filedirectory);
                         consolevectorhandler::clearConsoleVector();
                         int terminalSize = getTerminalSize(0) - 1;
                         for (int i = 0; i < terminalSize && i < filesindir.size(); i++) {
-                            consolevectorhandler::addToVector(filesindir[i]);
+                            std::string filePath = filedirectory + "/" + filesindir[i];
+                            if (std::filesystem::is_directory(filePath) || std::filesystem::is_regular_file(filePath)) {
+                                consolevectorhandler::addToVector(filesindir[i]);
+                            }
                         }
                     } else {
                         filedirectory = previousFileDirectory;
-                        consolevectorhandler::updateScreen();
+                        consolevectorhandler::updateScreen(consolevectorhandler::getCurrentSelected());
                         throw std::runtime_error("Not a directory");
                     }
-                }
+                } 
                 catch (const std::exception& e) {
                     std::cout << "Error: " << filedirectory + "/" + consolevectorhandler::getSelectedFile() << " is not a directory" << std::endl;
                     log("Error: " + filedirectory + "/" + consolevectorhandler::getSelectedFile() + " is not a directory");
                     filedirectory = previousFileDirectory;
-                    consolevectorhandler::updateScreen();
+                    consolevectorhandler::updateScreen(consolevectorhandler::getCurrentSelected());
+                }
+            } else if (interpreted == "backspace") {
+                std::string newFileDirectory = filedirectory.substr(0, filedirectory.find_last_of("/"));
+                if (newFileDirectory == "") {
+                    newFileDirectory = "/";
+                }
+                filedirectory = newFileDirectory;
+                consolevectorhandler::changeSelection(0, consolevectorhandler::getVectorLength());
+                consolevectorhandler::updateScreen(consolevectorhandler::getCurrentSelected());
+                std::vector<std::string> filesindir = getContentsInDir(filedirectory);
+                consolevectorhandler::clearConsoleVector();
+                int terminalSize = getTerminalSize(0) - 1;
+                for (int i = 0; i < terminalSize && i < filesindir.size(); i++) {
+                    std::string filePath = filedirectory + "/" + filesindir[i];
+                    if (std::filesystem::is_directory(filePath) || std::filesystem::is_regular_file(filePath)) {
+                        consolevectorhandler::addToVector(filesindir[i]);
+                    }
                 }
             } else if (interpreted == ":") {
-                consolevectorhandler::updateScreen();
+                consolevectorhandler::updateScreen(consolevectorhandler::getCurrentSelected());
                 std::cout << ":";
                 std::getline(std::cin, userCommand);
 
@@ -94,10 +123,10 @@ int main(int argc, char** argv) {
                         consolevectorhandler::addToVector(filesindir[i]);
                     }
                     consolevectorhandler::changeSelection(0, consolevectorhandler::getVectorLength());
-                    consolevectorhandler::updateScreen();
+                    consolevectorhandler::updateScreen(consolevectorhandler::getCurrentSelected());
                 }
             }
-            consolevectorhandler::updateScreen();
+            consolevectorhandler::updateScreen(consolevectorhandler::getCurrentSelected());
         }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(16));  // Frame delay
