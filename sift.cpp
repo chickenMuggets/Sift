@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
     }
 
     std::vector<std::string> filesindir = getContentsInDir(filedirectory);
-    int terminalSize = getTerminalSize(0);
+    int terminalSize = getTerminalSize(0) - 1;
     for (int i = 0; i < terminalSize && i < filesindir.size(); i++) {
         consolevectorhandler::addToVector(filesindir[i]);
     }
@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
                         log("Changed directory to: " + filedirectory);
                         std::vector<std::string> filesindir = getContentsInDir(filedirectory);
                         consolevectorhandler::clearConsoleVector();
-                        int terminalSize = getTerminalSize(0);
+                        int terminalSize = getTerminalSize(0) - 1;
                         for (int i = 0; i < terminalSize && i < filesindir.size(); i++) {
                             consolevectorhandler::addToVector(filesindir[i]);
                         }
@@ -89,7 +89,7 @@ int main(int argc, char** argv) {
                     std::getline(std::cin, filedirectory);
                     std::vector<std::string> filesindir = getContentsInDir(filedirectory);
                     consolevectorhandler::clearConsoleVector();
-                    int terminalSize = getTerminalSize(0);
+                    int terminalSize = getTerminalSize(0) - 1;
                     for (int i = 0; i < terminalSize && i < filesindir.size(); i++) {
                         consolevectorhandler::addToVector(filesindir[i]);
                     }

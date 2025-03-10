@@ -32,6 +32,5 @@
 *.app
 
 # VsCode
-*.vscode
-
-log.txt
+/.vscode/
+/output/
